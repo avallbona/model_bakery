@@ -58,8 +58,11 @@ def pytest_configure():
 
 @pytest.fixture(scope='session')
 def django_db_setup(django_db_blocker):
+    test_db = os.environ.get("TEST_DB", "sqlite")
+    if test_db not in ['postgresql', 'postgis']:
+        return
     with django_db_blocker.unblock():
         with connection.cursor() as c:
             c.execute('''create extension hstore;''')
-            c.execute('''create extension postgis;''')
+            # c.execute('''create extension postgis;''')
             c.execute('''create extension citext;''')
