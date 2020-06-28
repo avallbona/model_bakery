@@ -14,7 +14,6 @@ jobs:
     services:
       postgres:
         image: postgis/postgis:12
-        name: postgress
         env:
           POSTGRES_USER: user1
           POSTGRES_PASSWORD: pwd1
