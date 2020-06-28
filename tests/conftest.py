@@ -13,7 +13,8 @@ def pytest_configure():
         "tests.ambiguous",
         "tests.ambiguous2",
     ]
-
+    db_username = ""
+    db_password = ""
     if test_db == "sqlite":
         db_engine = "django.db.backends.sqlite3"
         db_name = ":memory:"
@@ -24,6 +25,8 @@ def pytest_configure():
     elif test_db == "postgis":
         db_engine = "django.contrib.gis.db.backends.postgis"
         db_name = "postgres"
+        db_username = "user1"
+        db_password = "pwd1"
         installed_apps = [
             "django.contrib.postgres",
             "django.contrib.gis",
@@ -32,7 +35,7 @@ def pytest_configure():
         raise NotImplementedError("Tests for % are not supported", test_db)
 
     settings.configure(
-        DATABASES={"default": {"ENGINE": db_engine, "NAME": db_name}},
+        DATABASES={"default": {"ENGINE": db_engine, "NAME": db_name, "USER": db_username, "PASSWORD": db_password}},
         INSTALLED_APPS=installed_apps,
         LANGUAGE_CODE="en",
         SITE_ID=1,
