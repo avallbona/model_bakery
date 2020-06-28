@@ -10,6 +10,20 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgis/postgis:12
+        name: postgress
+        env:
+          POSTGRES_USER: user1
+          POSTGRES_PASSWORD: pwd1
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     strategy:
       matrix:
 #        python: [3.5, 3.6, 3.7, 3.8]
@@ -21,17 +35,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
-      - uses: huaxk/postgis-action@v1
-        with:
-          postgresql version: '10'  # See https://https://hub.docker.com/r/mdillon/postgis for available versions, if it is not specified, use the default value 'latest'
-          postgresql password: 'pwd1'
-          postgresql user: 'user1'  # This optional environment variable is used in conjunction with postgresql password to set a user and its password. This variable will create the specified user with superuser power and a database with the same name. If it is not specified, then the default user of 'postgres' will be used.
-          postgresql db: 'test'  # This optional environment variable can be used to define a different name for the default database that is created when the image is first started. If it is not specified, then the value of postgresql user will be used.
-      - name: Installing db extensions
-        run: |
-          psql -h 127.0.0.1 -U user1 template1 -c "create extension hstore;"
-          psql -h 127.0.0.1 -U user1 template1 -c "create extension postgis;"
-          psql -h 127.0.0.1 -U user1 template1 -c "create extension citext;"
       - name: Installing Geospatial libraries
         run: sudo apt-get install binutils libproj-dev gdal-bin
       - name: Install dependencies

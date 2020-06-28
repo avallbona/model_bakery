@@ -1,7 +1,9 @@
 import os
+import pytest
 
 import django
 from django.conf import settings
+from django.db import connection
 
 
 def pytest_configure():
@@ -52,3 +54,12 @@ def pytest_configure():
     baker.generators.add("tests.generic.fields.CustomFieldViaSettings", gen_same_text)
 
     django.setup()
+
+
+@pytest.fixture(scope='session')
+def django_db_setup(django_db_blocker):
+    with django_db_blocker.unblock():
+        with connection.cursor() as c:
+            c.executescript('''create extension hstore;''')
+            c.executescript('''create extension citext;''')
+            # c.executescript('''create extension postgis;''')
