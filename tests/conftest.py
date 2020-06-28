@@ -24,7 +24,7 @@ def pytest_configure():
         installed_apps = ["django.contrib.postgres"] + installed_apps
     elif test_db == "postgis":
         db_engine = "django.contrib.gis.db.backends.postgis"
-        db_name = "postgres"
+        db_name = "test"
         db_username = "user1"
         db_password = "pwd1"
         installed_apps = [
