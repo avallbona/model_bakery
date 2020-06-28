@@ -35,7 +35,8 @@ def pytest_configure():
         raise NotImplementedError("Tests for % are not supported", test_db)
 
     settings.configure(
-        DATABASES={"default": {"ENGINE": db_engine, "NAME": db_name, "USER": db_username, "PASSWORD": db_password}},
+        DATABASES={"default": {"ENGINE": db_engine, "NAME": db_name,
+                               "USER": db_username, "PASSWORD": db_password, "HOST": "127.0.0.1"}},
         INSTALLED_APPS=installed_apps,
         LANGUAGE_CODE="en",
         SITE_ID=1,
