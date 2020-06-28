@@ -13,7 +13,7 @@ jobs:
 
     services:
       postgres:
-        image: postgis/postgis:12
+        image: postgis/postgis:latest
         env:
           POSTGRES_USER: user1
           POSTGRES_PASSWORD: pwd1
